@@ -1,6 +1,7 @@
-name: main
+name: 编译与测试
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, refactor-rs]
   pull_request:
@@ -47,6 +48,16 @@ jobs:
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: cargo test --workspace
       - run: cargo test -p aipocket-db --tests -- --ignored
+      - name: 编译后端发布版
+        run: |
+          cargo build --release --locked -p aipocket
+          tar -czf aipocket-linux-x86_64.tar.gz -C target/release aipocket
+      - name: 上传后端编译产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: aipocket-linux-x86_64
+          path: aipocket-linux-x86_64.tar.gz
+          if-no-files-found: error
       - uses: taiki-e/install-action@cargo-llvm-cov
       # scanner.rs is intentionally covered (not ignored). Keep only binary assembly /
       # large generated route tables out of the denominator.
@@ -77,6 +88,12 @@ jobs:
       - run: pnpm lint
       - run: pnpm test -- --run
       - run: pnpm build
+      - name: 上传前端编译产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: aipocket-frontend
+          path: frontend/dist
+          if-no-files-found: error
 
   docker:
     runs-on: ubuntu-latest
