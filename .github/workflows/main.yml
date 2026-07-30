@@ -156,9 +156,19 @@ jobs:
             echo "无效的发布标签: $RELEASE_TAG" >&2
             exit 1
           fi
-          gh release create "$RELEASE_TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --target "$GITHUB_SHA" \
-            --title "AIPocket $RELEASE_TAG" \
-            --notes "Linux x86_64 原生运行包，无需 Docker。解压后复制 .env.example 为 .env，配置 WEB_PASSWORD 和 WEB_JWT_SECRET，再运行 ./aipocket serve --host 0.0.0.0 --port 8000。" \
-            release/aipocket-native-linux-x86_64.tar.gz
+          notes="Linux x86_64 原生运行包，无需 Docker。解压后复制 .env.example 为 .env，配置 WEB_PASSWORD 和 WEB_JWT_SECRET，再运行 ./aipocket serve --host 0.0.0.0 --port 8000。"
+          if target=$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json targetCommitish --jq .targetCommitish 2>/dev/null); then
+            if [[ "$target" != "$GITHUB_SHA" ]]; then
+              echo "标签 $RELEASE_TAG 已指向其他提交: $target" >&2
+              exit 1
+            fi
+            gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --title "AIPocket $RELEASE_TAG" --notes "$notes"
+            gh release upload "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --clobber release/aipocket-native-linux-x86_64.tar.gz
+          else
+            gh release create "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "AIPocket $RELEASE_TAG" \
+              --notes "$notes" \
+              release/aipocket-native-linux-x86_64.tar.gz
+          fi
