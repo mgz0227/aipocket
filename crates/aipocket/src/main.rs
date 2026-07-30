@@ -26,10 +26,10 @@ enum Command {
         resume_run: Option<String>,
     },
     Serve {
-        #[arg(long, default_value = "0.0.0.0")]
-        host: IpAddr,
-        #[arg(long, default_value_t = 8000)]
-        port: u16,
+        #[arg(long)]
+        host: Option<IpAddr>,
+        #[arg(long)]
+        port: Option<u16>,
     },
     Watch,
     Queries,
@@ -68,7 +68,11 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
     let settings = Settings::load()?;
     match cli.command {
-        Command::Serve { host, port } => serve(settings, host, port).await,
+        Command::Serve { host, port } => {
+            let host = host.unwrap_or(settings.web_host);
+            let port = port.unwrap_or(settings.web_port);
+            serve(settings, host, port).await
+        }
         Command::Config => {
             let mut value = serde_json::to_value(&settings)?;
             for key in [

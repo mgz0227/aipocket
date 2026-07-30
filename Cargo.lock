@@ -19,7 +19,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-api",
  "aipocket-clients",
@@ -48,7 +48,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-api"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-clients",
  "aipocket-core",
@@ -79,7 +79,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-clients"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-core",
  "anyhow",
@@ -99,7 +99,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "chrono",
  "dotenvy",
@@ -114,7 +114,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-db"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-core",
  "anyhow",
@@ -131,7 +131,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-discovery"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-clients",
  "aipocket-core",
@@ -155,7 +155,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-prober"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-core",
  "anyhow",
@@ -175,7 +175,7 @@ dependencies = [
 
 [[package]]
 name = "aipocket-services"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aipocket-clients",
  "aipocket-core",

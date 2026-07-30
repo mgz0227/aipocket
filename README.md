@@ -115,10 +115,12 @@ tar -xzf aipocket-native-linux-x86_64.tar.gz
 cd aipocket
 cp .env.example .env
 # 编辑 .env，至少修改 WEB_PASSWORD、WEB_JWT_SECRET，并配置所需的扫描 API 密钥
-./aipocket serve --host 0.0.0.0 --port 8000
+./aipocket serve
 ```
 
-访问 `http://服务器IP:8000`。后端会按照 `WEB_STATIC_DIR=web` 直接托管包内前端。
+默认读取 `.env` 中的 `WEB_HOST=0.0.0.0` 和 `WEB_PORT=8000`。也可用
+`./aipocket serve --host 0.0.0.0 --port 8000` 临时覆盖。访问
+`http://服务器IP:8000`，后端会按照 `WEB_STATIC_DIR=web` 直接托管包内前端。
 
 ### Docker 部署（推荐）
 
@@ -191,6 +193,8 @@ aipocket shodan-info
 |------|--------|------|
 | `FOFA_KEYS` | — | FOFA key，逗号分隔，支持多 key 轮询 |
 | `SHODAN_KEYS` | — | Shodan key，逗号分隔 |
+| `WEB_HOST` | `0.0.0.0` | Web 服务监听地址，可由 `--host` 覆盖 |
+| `WEB_PORT` | `8000` | Web 服务监听端口，可由 `--port` 覆盖 |
 | `WEB_PASSWORD` | — | Web UI 登录密码（必填） |
 | `WEB_JWT_SECRET` | — | JWT 签名密钥（必填） |
 | `DATABASE_URL` | — | PostgreSQL 连接串。留空 = 仅 JSONL |

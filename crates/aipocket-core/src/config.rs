@@ -1,6 +1,7 @@
 use std::{
     collections::BTreeMap,
     env,
+    net::IpAddr,
     path::{Path, PathBuf},
 };
 
@@ -68,6 +69,8 @@ pub struct Settings {
     pub results_dir: String,
     pub web_password: String,
     pub web_jwt_secret: String,
+    pub web_host: IpAddr,
+    pub web_port: u16,
     pub web_token_ttl: u64,
     pub web_cors_origins: String,
     pub web_static_dir: String,
@@ -166,6 +169,8 @@ impl Default for Settings {
             results_dir: "results".into(),
             web_password: String::new(),
             web_jwt_secret: String::new(),
+            web_host: IpAddr::from([0, 0, 0, 0]),
+            web_port: 8000,
             web_token_ttl: 86400,
             web_cors_origins: "*".into(),
             web_static_dir: String::new(),
@@ -386,12 +391,14 @@ mod tests {
         let file = dir.join("config.env");
         fs::write(
             &file,
-            "fofa_keys= a, b ,,c\nVALIDATE_BATCH_SIZE=4\nBALANCE_BATCH_CONCURRENCY=3\nUNKNOWN=value\n",
+            "fofa_keys= a, b ,,c\nVALIDATE_BATCH_SIZE=4\nBALANCE_BATCH_CONCURRENCY=3\nWEB_HOST=127.0.0.1\nWEB_PORT=9000\nUNKNOWN=value\n",
         )
         .unwrap();
         let settings = Settings::load_from(&file).unwrap();
         assert!(settings.validate_batch_size >= 1);
         assert_eq!(settings.balance_batch_concurrency, 3);
+        assert_eq!(settings.web_host, IpAddr::from([127, 0, 0, 1]));
+        assert_eq!(settings.web_port, 9000);
         assert_eq!(normalize_list(" a, b ,,c "), "a,b,c");
     }
 
