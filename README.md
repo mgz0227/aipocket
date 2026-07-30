@@ -106,6 +106,20 @@ GitHub v1 只处理响应中明确标记为公开的仓库。
 
 ## 快速开始
 
+### Linux x86_64 原生 Release
+
+从 GitHub Releases 下载 `aipocket-native-linux-x86_64.tar.gz`，无需 Docker 或 Nginx：
+
+```bash
+tar -xzf aipocket-native-linux-x86_64.tar.gz
+cd aipocket
+cp .env.example .env
+# 编辑 .env，至少修改 WEB_PASSWORD、WEB_JWT_SECRET，并配置所需的扫描 API 密钥
+./aipocket serve --host 0.0.0.0 --port 8000
+```
+
+访问 `http://服务器IP:8000`。后端会按照 `WEB_STATIC_DIR=web` 直接托管包内前端。
+
 ### Docker 部署（推荐）
 
 ```bash
